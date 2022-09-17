@@ -1,13 +1,13 @@
-from flask import Flask, render_template, request,jsonify
+# from flask import Flask, render_template, request,jsonify
 import numpy as np
 
 import cv2
 import os
 
-from base64 import decodebytes
-app = Flask(__name__)
-# model = load_model('model.h5')
-# model.make_predict_function()
+# from base64 import decodebytes
+# app = Flask(__name__)
+# # model = load_model('model.h5')
+# # model.make_predict_function()
 
 def predict_label(img_path):
 	# i = image.load_img(img_path, target_size=(100,100))
@@ -110,37 +110,9 @@ def predict_label(img_path):
 		engine.say(description)
 		engine.runAndWait()
 		return description
-# routes
-@app.route("/", methods=['GET', 'POST'])
-def main():
-	return render_template("index.html")
-
-@app.route("/about")
-def about_page():
-	return "Flask app....."
-
-@app.route("/submit", methods = ['GET', 'POST'])
-def get_output():
-	if request.method == 'POST':
-		try:
-		#image as base64 encoded string
-			img_base64 = request.form['image']
-		#convert base64 string to image
-			img_data = decodebytes(img_base64.encode('utf-8'))
-			img = cv2.imdecode(np.frombuffer(img_data, np.uint8), cv2.IMREAD_COLOR)
-		#save image
-			cv2.imwrite('image.jpg', img)
-		#predict label
-			label = predict_label('image.jpg')
-			print(label)
-		#return label
-			return jsonify(label)
-		except Exception as e:
-			return e
-	else:
-		return "Error"
 
 
+label = predict_label('image.jpg')
+print(label)
 
-if __name__ =='__main__':
-	app.run(debug=True)
+
